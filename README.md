@@ -4,53 +4,69 @@
 [![Releases](https://img.shields.io/github/v/release/MatsuriDayo/NekoBoxForAndroid)](https://github.com/MatsuriDayo/NekoBoxForAndroid/releases)
 [![License: GPL-3.0](https://img.shields.io/badge/license-GPL--3.0-orange.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-อ่านเป็นภาษาไทย: [README_TH.md](README_TH.md)
+A sing-box-based universal proxy client for Android, forked and extended for
+personal Android pentesting work.
 
 ## 📌 About This Fork
 
-This is a personal fork of [MatsuriDayo/NekoBoxForAndroid](https://github.com/MatsuriDayo/NekoBoxForAndroid),
-tailored for Android pentesting work. Changes from upstream:
+This is a personal fork of [MatsuriDayo/NekoBoxForAndroid](https://github.com/MatsuriDayo/NekoBoxForAndroid).
+Changes from upstream:
 
 * Removed the "Ads" nav-drawer item that linked out to an external promo page
-* Added a **Kill Switch** shortcut in Settings that deep-links to Android's native VPN
-  settings, so you can enable "Always-on VPN" + "Block connections without VPN" for
-  OS-level fail-closed behavior if the tunnel ever dies or crashes
-* Added quick-add profile presets for **Burp Suite** and **mitmproxy** (HTTP outbound
-  to `127.0.0.1:8080`), for faster traffic interception setup
+* **Kill Switch** shortcut in Settings that deep-links to Android's native VPN settings,
+  so you can enable "Always-on VPN" + "Block connections without VPN" for OS-level
+  fail-closed behavior if the tunnel ever dies or crashes
+* Quick-add profile presets for **Burp Suite**, **mitmproxy**, and **OWASP ZAP**
+  (HTTP outbound to `127.0.0.1:8080`); each one probes the port first and warns if
+  nothing is listening there yet
+* **Install CA Certificate** shortcut in Settings, using Android's `KeyChain` installer,
+  for trusting a Burp/ZAP/mitmproxy CA to intercept HTTPS
+* Native **Traffic Log** screen (nav drawer) — a live, searchable view of sing-box's
+  Clash API connections (host, rule, chain, upload/download). Tap a connection for full
+  detail (source/destination IP+port, rule payload, process), then **Copy** it, **Block
+  domain** (adds a Route rule), or **Add to proxy scope** (adds that app to per-app
+  routing) straight from there
+  * Export the current list as JSON or CSV
+  * Optional **auto-export on VPN disconnect** (Settings), saved to the app's own
+    storage before the Clash API port goes down
+* **Secure Browsing**: one-tap Settings action that downloads the
+  [HaGeZi Threat Intelligence Feeds](https://github.com/hagezi/dns-blocklists) list
+  (up to 5000 malware/phishing domains, no account needed) into a single Route rule;
+  toggle or delete it like any other rule afterward
+* Upgraded the UI to **Material 3** (including fixing the crash and flat-card look that
+  came with that change) and set the default theme color to blue instead of pink
+* Icons across Settings and toolbar/popup menus now tint to the selected accent color
+  instead of a fixed gray
 * Fixed native build scripts for macOS (NDK host path) and for 16 KB page-size devices
 
 The built-in Clash API dashboard (`Settings > Enable Clash API`, then `Dashboard` in the
-nav drawer) already provides a live connections log (domain, rule, chain, bytes) with no
-extra changes needed.
+nav drawer) still works as before, as does the Quick Settings Tile and the notification's
+Stop action — both already existed upstream and are useful as quick one-tap VPN toggles.
 
 Still licensed under GPLv3, same as upstream — see [LICENSE](LICENSE).
 
 ---
 
-sing-box / universal proxy toolchain for Android.
-
-一款使用 sing-box 的 Android 通用代理软件.
-
-## 下载 / Downloads
+## Downloads
 
 [![GitHub All Releases](https://img.shields.io/github/downloads/Matsuridayo/NekoBoxForAndroid/total?label=downloads-total&logo=github&style=flat-square)](https://github.com/Matsuridayo/NekoBoxForAndroid/releases)
 
-[GitHub Releases 下载](https://github.com/Matsuridayo/NekoBoxForAndroid/releases)
+This fork has no releases of its own yet — build it from source (see
+[buildScript/](buildScript) and [libcore/build.sh](libcore/build.sh)), or grab the
+upstream releases: https://github.com/Matsuridayo/NekoBoxForAndroid/releases
 
-**Google Play 版本自 2024 年 5 月起已被第三方控制，为非开源版本，请不要下载。**
+**The Google Play version of the upstream app has been controlled by a third party since
+May 2024 and is a non-open-source version. Please do not download it.**
 
-**The Google Play version has been controlled by a third party since May 2024 and is a non-open
-source version. Please do not download it.**
-
-## 更新日志 & Telegram 发布频道 / Changelog & Telegram Channel
+## Changelog & Telegram Channel (upstream)
 
 https://t.me/Matsuridayo
 
-## 项目主页 & 文档 / Homepage & Documents
+## Homepage & Documents (upstream)
 
 https://matsuridayo.github.io
 
-## 支持的代理协议 / Supported Proxy Protocols
+## Supported Proxy Protocols
 
 * SOCKS (4/4a/5)
 * HTTP(S)
@@ -68,45 +84,16 @@ https://matsuridayo.github.io
 * NaïveProxy (naive-plugin)
 * Mieru (mieru-plugin)
 
-请到[这里](https://matsuridayo.github.io/nb4a-plugin/)下载插件以获得完整的代理支持.
+Please visit [here](https://matsuridayo.github.io/nb4a-plugin/) to download plugins for
+full proxy support.
 
-Please visit [here](https://matsuridayo.github.io/nb4a-plugin/) to download plugins for full proxy
-supports.
-
-## 支持的订阅格式 / Supported Subscription Format
-
-* 一些广泛使用的格式 (如 Shadowsocks, ClashMeta 和 v2rayN)
-* sing-box 出站
-
-仅支持解析出站，即节点。分流规则等信息会被忽略。
+## Supported Subscription Formats
 
 * Some widely used formats (like Shadowsocks, ClashMeta and v2rayN)
 * sing-box outbound
 
-Only resolving outbound, i.e. nodes, is supported. Information such as diversion rules are ignored.
-
-## 捐助 / Donate
-
-<details>
-
-如果这个项目对您有帮助, 可以通过捐赠的方式帮助我们维持这个项目.
-
-捐赠满等额 50 USD 可以在「[捐赠榜](https://mtrdnt.pages.dev/donation_list)」显示头像, 如果您未被添加到这里,
-欢迎联系我们补充.
-
-Donations of 50 USD or more can display your avatar on
-the [Donation List](https://mtrdnt.pages.dev/donation_list). If you are not added here, please
-contact us to add it.
-
-USDT TRC20
-
-`TRhnA7SXE5Sap5gSG3ijxRmdYFiD4KRhPs`
-
-XMR
-
-`49bwESYQjoRL3xmvTcjZKHEKaiGywjLYVQJMUv79bXonGiyDCs8AzE3KiGW2ytTybBCpWJUvov8SjZZEGg66a4e59GXa6k5`
-
-</details>
+Only resolving outbound, i.e. nodes, is supported. Information such as diversion rules
+are ignored.
 
 ## Credits
 
