@@ -80,8 +80,17 @@ class StatsBar @JvmOverloads constructor(
         TooltipCompat.setTooltipText(this, text)
     }
 
+    private fun findActivity(): MainActivity {
+        var ctx = context
+        while (ctx is android.content.ContextWrapper) {
+            if (ctx is MainActivity) return ctx
+            ctx = ctx.baseContext
+        }
+        error("StatsBar is not attached to a MainActivity context")
+    }
+
     fun changeState(state: BaseService.State) {
-        val activity = context as MainActivity
+        val activity = findActivity()
         fun postWhenStarted(what: () -> Unit) = activity.lifecycleScope.launch(Dispatchers.Main) {
             delay(100L)
             activity.whenStarted { what() }
@@ -123,7 +132,7 @@ class StatsBar @JvmOverloads constructor(
     }
 
     fun testConnection() {
-        val activity = context as MainActivity
+        val activity = findActivity()
         isEnabled = false
         setStatus(app.getText(R.string.connection_test_testing))
         runOnDefaultDispatcher {
