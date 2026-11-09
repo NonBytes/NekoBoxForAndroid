@@ -406,6 +406,17 @@ class ConfigurationFragment @JvmOverloads constructor(
                 }
             }
 
+            R.id.action_new_zap -> {
+                runOnDefaultDispatcher {
+                    import(listOf(HttpBean().apply {
+                        initializeDefaultValues()
+                        name = "OWASP ZAP"
+                        serverAddress = "127.0.0.1"
+                        serverPort = 8080
+                    }))
+                }
+            }
+
             R.id.action_new_ss -> {
                 startActivity(Intent(requireActivity(), ShadowsocksSettingsActivity::class.java))
             }

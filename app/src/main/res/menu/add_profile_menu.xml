@@ -37,6 +37,9 @@
                         android:id="@+id/action_new_mitmproxy"
                         android:title="@string/action_preset_mitmproxy" />
                     <item
+                        android:id="@+id/action_new_zap"
+                        android:title="@string/action_preset_zap" />
+                    <item
                         android:id="@+id/action_new_ss"
                         android:title="@string/action_shadowsocks" />
                     <item
