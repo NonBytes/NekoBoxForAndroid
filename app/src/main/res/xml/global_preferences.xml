@@ -112,6 +112,11 @@
             app:key="installCaCert"
             app:summary="@string/cert_install_summary"
             app:title="@string/cert_install_title" />
+        <Preference
+            app:icon="@drawable/ic_baseline_security_24"
+            app:key="secureBrowsing"
+            app:summary="@string/secure_browsing_summary"
+            app:title="@string/secure_browsing_title" />
         <SwitchPreference
             app:icon="@drawable/ic_baseline_legend_toggle_24"
             app:key="bypassLan"

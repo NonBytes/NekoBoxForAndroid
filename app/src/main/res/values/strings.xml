@@ -244,6 +244,11 @@
     <string name="traffic_log_add_scope_done">%1$s added to proxied apps.</string>
     <string name="traffic_log_add_scope_already">%1$s is already in the proxied apps list.</string>
     <string name="traffic_log_more_actions">More actions</string>
+    <string name="secure_browsing_title">Secure Browsing (block malware domains)</string>
+    <string name="secure_browsing_summary">Downloads the HaGeZi Threat Intelligence Feeds list (up to 5000 malware/phishing domains) into a Route rule. Toggle or remove it anytime from the Route screen.</string>
+    <string name="secure_browsing_updating">Downloading blocklist…</string>
+    <string name="secure_browsing_done">Blocked %1$d malware domains. Reload to apply, or manage it from the Route screen.</string>
+    <string name="secure_browsing_failed">Could not download the blocklist. Check your internet connection and try again.</string>
     <string name="action_shadowsocks" translatable="false">Shadowsocks</string>
     <string name="action_shadowsocksr" translatable="false">ShadowsocksR</string>
     <string name="action_vmess" translatable="false">VMess</string>

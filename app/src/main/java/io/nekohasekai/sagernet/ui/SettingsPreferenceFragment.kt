@@ -96,6 +96,23 @@ class SettingsPreferenceFragment : PreferenceFragmentCompat() {
             true
         }
 
+        val secureBrowsing = findPreference<Preference>("secureBrowsing")!!
+        secureBrowsing.setOnPreferenceClickListener {
+            snackbar(R.string.secure_browsing_updating).show()
+            runOnDefaultDispatcher {
+                val count = io.nekohasekai.sagernet.bg.SecureBrowsing.updateBlocklist()
+                onMainDispatcher {
+                    if (count != null) {
+                        snackbar(getString(R.string.secure_browsing_done, count)).show()
+                        needReload()
+                    } else {
+                        snackbar(R.string.secure_browsing_failed).show()
+                    }
+                }
+            }
+            true
+        }
+
         val remoteDns = findPreference<EditTextPreference>(Key.REMOTE_DNS)!!
         val directDns = findPreference<EditTextPreference>(Key.DIRECT_DNS)!!
         val enableDnsRouting = findPreference<SwitchPreference>(Key.ENABLE_DNS_ROUTING)!!
