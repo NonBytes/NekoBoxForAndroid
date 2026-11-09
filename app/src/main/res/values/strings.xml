@@ -237,6 +237,13 @@
     <string name="traffic_log_block_domain">Block domain</string>
     <string name="traffic_log_block_confirm">Block %1$s? This adds a route rule.</string>
     <string name="traffic_log_detail_title">Connection detail</string>
+    <string name="auto_export_traffic_log">Auto-export Traffic Log on disconnect</string>
+    <string name="auto_export_traffic_log_summary">Save the live connections list as JSON to this app\'s own storage (files/traffic-logs/) every time the VPN stops. Requires Clash API.</string>
+    <string name="traffic_log_add_scope">Add to proxy scope</string>
+    <string name="traffic_log_add_scope_no_process">No process info for this connection.</string>
+    <string name="traffic_log_add_scope_done">%1$s added to proxied apps.</string>
+    <string name="traffic_log_add_scope_already">%1$s is already in the proxied apps list.</string>
+    <string name="traffic_log_more_actions">More actions</string>
     <string name="action_shadowsocks" translatable="false">Shadowsocks</string>
     <string name="action_shadowsocksr" translatable="false">ShadowsocksR</string>
     <string name="action_vmess" translatable="false">VMess</string>

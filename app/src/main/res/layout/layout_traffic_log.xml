@@ -16,11 +16,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <EditText
+        <AutoCompleteTextView
             android:id="@+id/search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
+            android:completionThreshold="1"
             android:hint="@string/traffic_log_search_hint"
             android:inputType="text"
             android:maxLines="1"

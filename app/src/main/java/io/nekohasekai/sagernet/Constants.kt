@@ -151,6 +151,7 @@ object Key {
 
     const val APP_TLS_VERSION = "appTLSVersion"
     const val ENABLE_CLASH_API = "enableClashAPI"
+    const val AUTO_EXPORT_TRAFFIC_LOG = "autoExportTrafficLog"
 }
 
 object TunImplementation {

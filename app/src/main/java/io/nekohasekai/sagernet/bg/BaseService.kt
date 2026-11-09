@@ -240,6 +240,7 @@ class BaseService {
             data.notification?.destroy()
             data.notification = null
             this as Service
+            val serviceContext: Context = this
 
             data.changeState(State.Stopping)
 
@@ -247,6 +248,13 @@ class BaseService {
                 data.connectingJob?.cancelAndJoin() // ensure stop connecting first
                 // we use a coroutineScope here to allow clean-up in parallel
                 coroutineScope {
+                    if (DataStore.autoExportTrafficLog && DataStore.enableClashAPI) {
+                        // must run before killProcesses() closes the Clash API port
+                        onIoDispatcher {
+                            val connections = ClashApiClient.fetchConnections()
+                            ClashApiClient.exportToAppStorage(serviceContext, connections)
+                        }
+                    }
                     killProcesses()
                     val data = data
                     if (data.closeReceiverRegistered) {

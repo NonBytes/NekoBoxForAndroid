@@ -9,7 +9,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.ArrayAdapter
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.getSystemService
@@ -18,10 +18,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.google.gson.annotations.SerializedName
 import io.nekohasekai.sagernet.R
+import io.nekohasekai.sagernet.bg.ClashApiClient
+import io.nekohasekai.sagernet.bg.ClashConnection
 import io.nekohasekai.sagernet.database.DataStore
 import io.nekohasekai.sagernet.database.ProfileManager
 import io.nekohasekai.sagernet.database.RuleEntity
@@ -33,9 +33,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import java.util.concurrent.TimeUnit
 
 class TrafficLogFragment : ToolbarFragment(R.layout.layout_traffic_log),
     Toolbar.OnMenuItemClickListener {
@@ -46,6 +43,10 @@ class TrafficLogFragment : ToolbarFragment(R.layout.layout_traffic_log),
     private var lastConnections: List<ClashConnection> = emptyList()
     private var filterText: String = ""
     private val adapter = ConnectionAdapter()
+    private val processSuggestionAdapter by lazy {
+        ArrayAdapter<String>(requireContext(), android.R.layout.simple_dropdown_item_1line)
+    }
+    private var knownProcesses = emptySet<String>()
 
     private val exportJsonLauncher =
         registerForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
@@ -55,42 +56,6 @@ class TrafficLogFragment : ToolbarFragment(R.layout.layout_traffic_log),
         registerForActivityResult(ActivityResultContracts.CreateDocument("text/csv")) { uri ->
             if (uri != null) doExport(uri, json = false)
         }
-
-    private val client by lazy {
-        OkHttpClient.Builder()
-            .connectTimeout(1, TimeUnit.SECONDS)
-            .readTimeout(2, TimeUnit.SECONDS)
-            .build()
-    }
-    private val gson = Gson()
-
-    data class ClashConnections(
-        val connections: List<ClashConnection>?,
-    )
-
-    data class ClashConnection(
-        val id: String,
-        val metadata: ClashMetadata,
-        val upload: Long,
-        val download: Long,
-        val start: String?,
-        val chains: List<String>?,
-        val rule: String?,
-        val rulePayload: String?,
-    )
-
-    data class ClashMetadata(
-        val network: String?,
-        val type: String?,
-        val host: String?,
-        @SerializedName("sourceIP") val sourceIP: String?,
-        @SerializedName("sourcePort") val sourcePort: String?,
-        @SerializedName("destinationIP") val destinationIP: String?,
-        @SerializedName("destinationPort") val destinationPort: String?,
-        @SerializedName("processPath") val processPath: String?,
-    ) {
-        fun displayHost() = host?.takeIf { it.isNotBlank() } ?: destinationIP ?: "?"
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -104,6 +69,7 @@ class TrafficLogFragment : ToolbarFragment(R.layout.layout_traffic_log),
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
 
+        binding.search.setAdapter(processSuggestionAdapter)
         binding.search.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
@@ -129,26 +95,25 @@ class TrafficLogFragment : ToolbarFragment(R.layout.layout_traffic_log),
     private suspend fun refresh() {
         if (!DataStore.enableClashAPI) {
             lastConnections = emptyList()
-            setEmptyMessage(getString(R.string.traffic_log_need_clash_api))
+            onMainDispatcher { setEmptyMessage(getString(R.string.traffic_log_need_clash_api)) }
             return
         }
 
-        try {
-            val request = Request.Builder()
-                .url("http://127.0.0.1:9090/connections")
-                .build()
-            val response = client.newCall(request).execute()
-            val body = response.body?.string() ?: ""
-            response.close()
-            val parsed = gson.fromJson(body, ClashConnections::class.java)
-            lastConnections = parsed?.connections.orEmpty()
-        } catch (e: Exception) {
-            lastConnections = emptyList()
-            onMainDispatcher { setEmptyMessage(getString(R.string.traffic_log_need_clash_api) + "\n\n(${e.readableMessage})") }
-            return
+        lastConnections = onIoDispatcher { ClashApiClient.fetchConnections() }
+        onMainDispatcher {
+            updateProcessSuggestions()
+            applyFilter()
         }
+    }
 
-        onMainDispatcher { applyFilter() }
+    private fun updateProcessSuggestions() {
+        val processes = lastConnections.mapNotNull { it.metadata.processPath?.takeIf { p -> p.isNotBlank() } }
+            .toSet()
+        if (processes == knownProcesses) return
+        knownProcesses = processes
+        processSuggestionAdapter.clear()
+        processSuggestionAdapter.addAll(processes.sorted())
+        processSuggestionAdapter.notifyDataSetChanged()
     }
 
     private fun applyFilter() {
@@ -224,8 +189,23 @@ class TrafficLogFragment : ToolbarFragment(R.layout.layout_traffic_log),
             .setTitle(R.string.traffic_log_detail_title)
             .setMessage(detail)
             .setPositiveButton(R.string.traffic_log_copy) { _, _ -> copyToClipboard(detail) }
-            .setNeutralButton(R.string.traffic_log_block_domain) { _, _ -> confirmBlock(conn) }
+            .setNeutralButton(R.string.traffic_log_more_actions) { _, _ -> showMoreActions(conn) }
             .setNegativeButton(android.R.string.cancel, null)
+            .show()
+    }
+
+    private fun showMoreActions(conn: ClashConnection) {
+        val options = arrayOf(
+            getString(R.string.traffic_log_block_domain),
+            getString(R.string.traffic_log_add_scope),
+        )
+        MaterialAlertDialogBuilder(requireContext())
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> confirmBlock(conn)
+                    1 -> addToProxyScope(conn)
+                }
+            }
             .show()
     }
 
@@ -253,6 +233,25 @@ class TrafficLogFragment : ToolbarFragment(R.layout.layout_traffic_log),
             }
             .setNegativeButton(android.R.string.cancel, null)
             .show()
+    }
+
+    private fun addToProxyScope(conn: ClashConnection) {
+        val pkg = conn.metadata.processPath
+        if (pkg.isNullOrBlank()) {
+            snackbar(R.string.traffic_log_add_scope_no_process).show()
+            return
+        }
+        val individual = DataStore.individual.split('\n').filter { it.isNotBlank() }.toMutableList()
+        if (pkg in individual && DataStore.proxyApps && !DataStore.bypass) {
+            snackbar(getString(R.string.traffic_log_add_scope_already, pkg)).show()
+            return
+        }
+        if (pkg !in individual) individual.add(pkg)
+        DataStore.individual = individual.joinToString("\n")
+        DataStore.proxyApps = true
+        DataStore.bypass = false
+        needReload()
+        snackbar(getString(R.string.traffic_log_add_scope_done, pkg)).show()
     }
 
     private fun doExport(uri: android.net.Uri, json: Boolean) {
