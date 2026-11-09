@@ -3,11 +3,13 @@ package io.nekohasekai.sagernet.ui
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.doOnLayout
 import androidx.lifecycle.lifecycleScope
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.google.gson.annotations.SerializedName
 import io.nekohasekai.sagernet.R
 import io.nekohasekai.sagernet.database.DataStore
@@ -28,6 +30,16 @@ class TrafficLogFragment : ToolbarFragment(R.layout.layout_traffic_log),
     private lateinit var binding: LayoutTrafficLogBinding
     private var pollJob: Job? = null
     private var paused = false
+    private var lastConnections: List<ClashConnection> = emptyList()
+
+    private val exportJsonLauncher =
+        registerForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
+            if (uri != null) doExport(uri, json = true)
+        }
+    private val exportCsvLauncher =
+        registerForActivityResult(ActivityResultContracts.CreateDocument("text/csv")) { uri ->
+            if (uri != null) doExport(uri, json = false)
+        }
 
     private val client by lazy {
         OkHttpClient.Builder()
@@ -96,6 +108,7 @@ class TrafficLogFragment : ToolbarFragment(R.layout.layout_traffic_log),
             response.close()
             val parsed = gson.fromJson(body, ClashConnections::class.java)
             val connections = parsed?.connections.orEmpty()
+            lastConnections = connections
             if (connections.isEmpty()) {
                 getString(R.string.traffic_log_no_connections)
             } else {
@@ -144,8 +157,57 @@ class TrafficLogFragment : ToolbarFragment(R.layout.layout_traffic_log),
                 paused = !paused
                 item.setTitle(if (paused) R.string.traffic_log_resume else R.string.traffic_log_pause)
             }
+
+            R.id.action_export_json -> {
+                if (lastConnections.isEmpty()) {
+                    snackbar(R.string.traffic_log_export_empty).show()
+                } else {
+                    exportJsonLauncher.launch("traffic-log-${System.currentTimeMillis()}.json")
+                }
+            }
+
+            R.id.action_export_csv -> {
+                if (lastConnections.isEmpty()) {
+                    snackbar(R.string.traffic_log_export_empty).show()
+                } else {
+                    exportCsvLauncher.launch("traffic-log-${System.currentTimeMillis()}.csv")
+                }
+            }
         }
         return true
+    }
+
+    private fun doExport(uri: android.net.Uri, json: Boolean) {
+        val connections = lastConnections
+        try {
+            requireContext().contentResolver.openOutputStream(uri)?.use { out ->
+                if (json) {
+                    val pretty = GsonBuilder().setPrettyPrinting().create()
+                    out.write(pretty.toJson(connections).toByteArray())
+                } else {
+                    val sb = StringBuilder()
+                    sb.append("host,port,network,chain,rule,upload,download,process,start\n")
+                    for (conn in connections) {
+                        val host = conn.metadata.host?.takeIf { it.isNotBlank() }
+                            ?: conn.metadata.destinationIP ?: ""
+                        fun esc(s: String?) = "\"${(s ?: "").replace("\"", "\"\"")}\""
+                        sb.append(esc(host)).append(',')
+                        sb.append(esc(conn.metadata.destinationPort)).append(',')
+                        sb.append(esc(conn.metadata.network)).append(',')
+                        sb.append(esc(conn.chains?.reversed()?.joinToString(" -> "))).append(',')
+                        sb.append(esc(conn.rule)).append(',')
+                        sb.append(conn.upload).append(',')
+                        sb.append(conn.download).append(',')
+                        sb.append(esc(conn.metadata.processPath)).append(',')
+                        sb.append(esc(conn.start)).append('\n')
+                    }
+                    out.write(sb.toString().toByteArray())
+                }
+            }
+            snackbar(getString(R.string.traffic_log_export_done, connections.size)).show()
+        } catch (e: Exception) {
+            snackbar(e.readableMessage).show()
+        }
     }
 
     override fun onDestroyView() {

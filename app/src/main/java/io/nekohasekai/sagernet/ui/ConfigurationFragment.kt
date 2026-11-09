@@ -328,6 +328,32 @@ class ConfigurationFragment @JvmOverloads constructor(
             }
         }
 
+    private fun addPentestPreset(toolName: String, port: Int) {
+        runOnDefaultDispatcher {
+            val reachable = try {
+                java.net.Socket().use {
+                    it.connect(java.net.InetSocketAddress("127.0.0.1", port), 300)
+                    true
+                }
+            } catch (_: Exception) {
+                false
+            }
+
+            import(listOf(HttpBean().apply {
+                initializeDefaultValues()
+                name = toolName
+                serverAddress = "127.0.0.1"
+                serverPort = port
+            }))
+
+            onMainDispatcher {
+                if (!reachable) {
+                    snackbar(getString(R.string.proxy_check_unreachable, port, toolName)).show()
+                }
+            }
+        }
+    }
+
     suspend fun import(proxies: List<AbstractBean>) {
         val targetId = DataStore.selectedGroupForImport()
         for (proxy in proxies) {
@@ -384,38 +410,11 @@ class ConfigurationFragment @JvmOverloads constructor(
                 startActivity(Intent(requireActivity(), HttpSettingsActivity::class.java))
             }
 
-            R.id.action_new_burp -> {
-                runOnDefaultDispatcher {
-                    import(listOf(HttpBean().apply {
-                        initializeDefaultValues()
-                        name = "Burp Suite"
-                        serverAddress = "127.0.0.1"
-                        serverPort = 8080
-                    }))
-                }
-            }
+            R.id.action_new_burp -> addPentestPreset("Burp Suite", 8080)
 
-            R.id.action_new_mitmproxy -> {
-                runOnDefaultDispatcher {
-                    import(listOf(HttpBean().apply {
-                        initializeDefaultValues()
-                        name = "mitmproxy"
-                        serverAddress = "127.0.0.1"
-                        serverPort = 8080
-                    }))
-                }
-            }
+            R.id.action_new_mitmproxy -> addPentestPreset("mitmproxy", 8080)
 
-            R.id.action_new_zap -> {
-                runOnDefaultDispatcher {
-                    import(listOf(HttpBean().apply {
-                        initializeDefaultValues()
-                        name = "OWASP ZAP"
-                        serverAddress = "127.0.0.1"
-                        serverPort = 8080
-                    }))
-                }
-            }
+            R.id.action_new_zap -> addPentestPreset("OWASP ZAP", 8080)
 
             R.id.action_new_ss -> {
                 startActivity(Intent(requireActivity(), ShadowsocksSettingsActivity::class.java))

@@ -222,6 +222,15 @@
     <string name="traffic_log_resume">Resume</string>
     <string name="traffic_log_need_clash_api">Enable \"Clash API\" in Settings, then start the VPN, to see live connections here.</string>
     <string name="traffic_log_no_connections">No active connections yet.</string>
+    <string name="traffic_log_export">Export</string>
+    <string name="traffic_log_export_json">Export as JSON</string>
+    <string name="traffic_log_export_csv">Export as CSV</string>
+    <string name="traffic_log_export_empty">Nothing to export yet.</string>
+    <string name="traffic_log_export_done">Exported %1$d connections.</string>
+    <string name="cert_install_title">Install CA Certificate</string>
+    <string name="cert_install_summary">Launches Android\'s certificate installer, to trust your Burp/ZAP/mitmproxy CA for HTTPS interception.</string>
+    <string name="cert_install_failed">No certificate installer app found on this device.</string>
+    <string name="proxy_check_unreachable">Nothing is listening on 127.0.0.1:%1$d yet — start %2$s first or traffic won\'t route through it. Added anyway.</string>
     <string name="action_shadowsocks" translatable="false">Shadowsocks</string>
     <string name="action_shadowsocksr" translatable="false">ShadowsocksR</string>
     <string name="action_vmess" translatable="false">VMess</string>

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.security.KeyChain
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
@@ -81,6 +82,16 @@ class SettingsPreferenceFragment : PreferenceFragmentCompat() {
                 startActivity(Intent(Settings.ACTION_VPN_SETTINGS))
             } catch (_: Exception) {
                 Toast.makeText(requireContext(), R.string.kill_switch_open_failed, Toast.LENGTH_SHORT).show()
+            }
+            true
+        }
+
+        val installCaCert = findPreference<Preference>("installCaCert")!!
+        installCaCert.setOnPreferenceClickListener {
+            try {
+                startActivity(KeyChain.createInstallIntent())
+            } catch (_: Exception) {
+                Toast.makeText(requireContext(), R.string.cert_install_failed, Toast.LENGTH_SHORT).show()
             }
             true
         }

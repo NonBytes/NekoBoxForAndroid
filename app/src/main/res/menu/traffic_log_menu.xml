@@ -6,4 +6,18 @@
         android:icon="@drawable/ic_baseline_refresh_24"
         android:title="@string/traffic_log_pause"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_export"
+        android:icon="@drawable/baseline_save_24"
+        android:title="@string/traffic_log_export"
+        app:showAsAction="ifRoom">
+        <menu>
+            <item
+                android:id="@+id/action_export_json"
+                android:title="@string/traffic_log_export_json" />
+            <item
+                android:id="@+id/action_export_csv"
+                android:title="@string/traffic_log_export_csv" />
+        </menu>
+    </item>
 </menu>

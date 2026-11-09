@@ -107,6 +107,11 @@
             app:key="killSwitchSettings"
             app:summary="@string/kill_switch_summary"
             app:title="@string/kill_switch_title" />
+        <Preference
+            app:icon="@drawable/ic_baseline_vpn_key_24"
+            app:key="installCaCert"
+            app:summary="@string/cert_install_summary"
+            app:title="@string/cert_install_title" />
         <SwitchPreference
             app:icon="@drawable/ic_baseline_legend_toggle_24"
             app:key="bypassLan"
