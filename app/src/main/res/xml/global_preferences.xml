@@ -102,6 +102,11 @@
             app:key="proxyApps"
             app:summary="@string/proxied_apps_summary"
             app:title="@string/proxied_apps" />
+        <Preference
+            app:icon="@drawable/ic_action_lock"
+            app:key="killSwitchSettings"
+            app:summary="@string/kill_switch_summary"
+            app:title="@string/kill_switch_title" />
         <SwitchPreference
             app:icon="@drawable/ic_baseline_legend_toggle_24"
             app:key="bypassLan"

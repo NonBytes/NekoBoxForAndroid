@@ -54,6 +54,7 @@ import io.nekohasekai.sagernet.database.preference.OnPreferenceDataStoreChangeLi
 import io.nekohasekai.sagernet.databinding.LayoutProfileListBinding
 import io.nekohasekai.sagernet.databinding.LayoutProgressListBinding
 import io.nekohasekai.sagernet.fmt.AbstractBean
+import io.nekohasekai.sagernet.fmt.http.HttpBean
 import io.nekohasekai.sagernet.fmt.toUniversalLink
 import io.nekohasekai.sagernet.group.GroupUpdater
 import io.nekohasekai.sagernet.group.RawUpdater
@@ -381,6 +382,28 @@ class ConfigurationFragment @JvmOverloads constructor(
 
             R.id.action_new_http -> {
                 startActivity(Intent(requireActivity(), HttpSettingsActivity::class.java))
+            }
+
+            R.id.action_new_burp -> {
+                runOnDefaultDispatcher {
+                    import(listOf(HttpBean().apply {
+                        initializeDefaultValues()
+                        name = "Burp Suite"
+                        serverAddress = "127.0.0.1"
+                        serverPort = 8080
+                    }))
+                }
+            }
+
+            R.id.action_new_mitmproxy -> {
+                runOnDefaultDispatcher {
+                    import(listOf(HttpBean().apply {
+                        initializeDefaultValues()
+                        name = "mitmproxy"
+                        serverAddress = "127.0.0.1"
+                        serverPort = 8080
+                    }))
+                }
             }
 
             R.id.action_new_ss -> {
