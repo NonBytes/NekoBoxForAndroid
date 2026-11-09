@@ -4,6 +4,29 @@
 [![Releases](https://img.shields.io/github/v/release/MatsuriDayo/NekoBoxForAndroid)](https://github.com/MatsuriDayo/NekoBoxForAndroid/releases)
 [![License: GPL-3.0](https://img.shields.io/badge/license-GPL--3.0-orange.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
+อ่านเป็นภาษาไทย: [README_TH.md](README_TH.md)
+
+## 📌 About This Fork
+
+This is a personal fork of [MatsuriDayo/NekoBoxForAndroid](https://github.com/MatsuriDayo/NekoBoxForAndroid),
+tailored for Android pentesting work. Changes from upstream:
+
+* Removed the "Ads" nav-drawer item that linked out to an external promo page
+* Added a **Kill Switch** shortcut in Settings that deep-links to Android's native VPN
+  settings, so you can enable "Always-on VPN" + "Block connections without VPN" for
+  OS-level fail-closed behavior if the tunnel ever dies or crashes
+* Added quick-add profile presets for **Burp Suite** and **mitmproxy** (HTTP outbound
+  to `127.0.0.1:8080`), for faster traffic interception setup
+* Fixed native build scripts for macOS (NDK host path) and for 16 KB page-size devices
+
+The built-in Clash API dashboard (`Settings > Enable Clash API`, then `Dashboard` in the
+nav drawer) already provides a live connections log (domain, rule, chain, bytes) with no
+extra changes needed.
+
+Still licensed under GPLv3, same as upstream — see [LICENSE](LICENSE).
+
+---
+
 sing-box / universal proxy toolchain for Android.
 
 一款使用 sing-box 的 Android 通用代理软件.
