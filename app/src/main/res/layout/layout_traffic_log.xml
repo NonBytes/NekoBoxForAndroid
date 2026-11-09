@@ -14,25 +14,35 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="8dp">
+        android:orientation="vertical">
 
-        <ScrollView
-            android:id="@+id/scroolview"
+        <EditText
+            android:id="@+id/search"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="@string/traffic_log_search_hint"
+            android:inputType="text"
+            android:maxLines="1"
+            tools:ignore="Autofill,LabelFor" />
 
-            <TextView
-                android:id="@+id/textview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:ems="10"
-                android:focusable="true"
-                android:fontFamily="monospace"
-                android:gravity="start|top"
-                android:textIsSelectable="true"
-                tools:ignore="LabelFor" />
-        </ScrollView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:paddingBottom="8dp"
+            tools:listitem="@layout/layout_traffic_log_item" />
+
+        <TextView
+            android:id="@+id/empty_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="24dp"
+            android:visibility="gone" />
+
     </LinearLayout>
 
 </LinearLayout>

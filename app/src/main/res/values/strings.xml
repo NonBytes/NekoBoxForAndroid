@@ -231,6 +231,12 @@
     <string name="cert_install_summary">Launches Android\'s certificate installer, to trust your Burp/ZAP/mitmproxy CA for HTTPS interception.</string>
     <string name="cert_install_failed">No certificate installer app found on this device.</string>
     <string name="proxy_check_unreachable">Nothing is listening on 127.0.0.1:%1$d yet — start %2$s first or traffic won\'t route through it. Added anyway.</string>
+    <string name="traffic_log_search_hint">Filter by host or process…</string>
+    <string name="traffic_log_copy">Copy</string>
+    <string name="traffic_log_copied">Copied.</string>
+    <string name="traffic_log_block_domain">Block domain</string>
+    <string name="traffic_log_block_confirm">Block %1$s? This adds a route rule.</string>
+    <string name="traffic_log_detail_title">Connection detail</string>
     <string name="action_shadowsocks" translatable="false">Shadowsocks</string>
     <string name="action_shadowsocksr" translatable="false">ShadowsocksR</string>
     <string name="action_vmess" translatable="false">VMess</string>
