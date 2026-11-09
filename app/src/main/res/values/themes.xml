@@ -6,6 +6,11 @@
         <item name="colorButtonNormal">?colorAccent</item>
         <item name="android:navigationBarColor">?colorPrimaryDark</item>
 
+        <!-- Most of our icon drawables bake in android:tint="?attr/colorControlNormal";
+             left at Material's default neutral gray it makes every Settings/menu icon
+             look generic no matter which accent theme is picked. -->
+        <item name="colorControlNormal">?colorAccent</item>
+
         <!-- M3 defaults to a flat, tonal-surface card with almost no shadow;
              use the Elevated variant so list items keep real depth. -->
         <item name="materialCardViewStyle">@style/Widget.Material3.CardView.Elevated</item>
@@ -58,6 +63,7 @@
         <item name="actionModeCloseDrawable">@drawable/ic_navigation_close</item>
         <item name="colorButtonNormal">?colorAccent</item>
         <item name="android:navigationBarColor">?colorPrimaryDark</item>
+        <item name="colorControlNormal">?colorAccent</item>
         <item name="colorPrimary">@color/material_pink_500</item>
         <item name="colorPrimaryDark">@color/material_pink_700</item>
         <item name="colorAccent">@color/material_pink_accent_200</item>
