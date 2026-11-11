@@ -290,4 +290,9 @@
 
     <color name="preference_simple_menu_background">#FAFAFA</color>
 
+    <!-- Floating dark stats pill (light theme) -->
+    <color name="stats_pill_bg">#FF1C1B1F</color>
+    <color name="stats_pill_text">#FFFFFFFF</color>
+    <color name="stats_pill_text_secondary">#B3FFFFFF</color>
+
 </resources>

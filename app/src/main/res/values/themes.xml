@@ -15,6 +15,17 @@
              use the Elevated variant so list items keep real depth. -->
         <item name="materialCardViewStyle">@style/Widget.Material3.CardView.Elevated</item>
 
+        <!-- Modern M3 shape system: generous rounding on cards, dialogs, buttons and chips. -->
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.SagerNet.Small</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.SagerNet.Medium</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.SagerNet.Large</item>
+
+        <!-- Rounded pill for selected navigation drawer items. -->
+        <item name="itemShapeAppearance">@style/ShapeAppearance.SagerNet.Large</item>
+
+        <!-- Settings screens: accent-colored category headers. -->
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.SagerNet</item>
+
         <item name="colorPrimary">@color/material_pink_500</item>
         <item name="colorPrimaryDark">@color/material_pink_700</item>
         <item name="colorAccent">@color/material_pink_accent_200</item>
@@ -29,12 +40,13 @@
 
         <item name="fabColorBackground">?colorPrimary</item>
         <item name="selectedColorPrimary">?colorPrimary</item>
-        <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
-        <item name="tabTextColor">#99FFFFFF</item>
-        <item name="tabSelectedTextColor">@color/white</item>
-        <item name="tabIndicatorColor">@color/white</item>
-        <item name="tabRippleColor">@color/white</item>
-        <item name="whiteOrTextPrimary">@color/white</item>
+        <item name="actionBarTheme">@style/ThemeOverlay.Material3</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="tabTextColor">?android:textColorSecondary</item>
+        <item name="tabSelectedTextColor">?colorPrimary</item>
+        <item name="tabIndicatorColor">?colorPrimary</item>
+        <item name="tabRippleColor">?colorPrimary</item>
+        <item name="whiteOrTextPrimary">?android:textColorPrimary</item>
 
         <item name="windowActionModeOverlay">true</item>
 
@@ -43,10 +55,6 @@
         <item name="windowNoTitle">true</item>
 
         <item name="chipStyle">@style/Widget.MaterialComponents.Chip.Choice.SagerNet</item>
-
-        <item name="itemShapeAppearance">
-            @style/ShapeAppearance.MaterialComponents.MediumComponent
-        </item>
 
         <item name="alertDialogTheme">
             @style/ThemeOverlay.MaterialComponents.MaterialAlertDialog.SagerNet
@@ -78,12 +86,13 @@
 
         <item name="fabColorBackground">?colorPrimary</item>
         <item name="selectedColorPrimary">?colorPrimary</item>
-        <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
-        <item name="tabTextColor">#99FFFFFF</item>
-        <item name="tabSelectedTextColor">@color/white</item>
-        <item name="tabIndicatorColor">@color/white</item>
-        <item name="tabRippleColor">@color/white</item>
-        <item name="whiteOrTextPrimary">@color/white</item>
+        <item name="actionBarTheme">@style/ThemeOverlay.Material3</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="tabTextColor">?android:textColorSecondary</item>
+        <item name="tabSelectedTextColor">?colorPrimary</item>
+        <item name="tabIndicatorColor">?colorPrimary</item>
+        <item name="tabRippleColor">?colorPrimary</item>
+        <item name="whiteOrTextPrimary">?android:textColorPrimary</item>
 
         <item name="windowActionModeOverlay">true</item>
 
@@ -93,9 +102,11 @@
 
         <item name="chipStyle">@style/Widget.MaterialComponents.Chip.Choice.SagerNet</item>
 
-        <item name="itemShapeAppearance">
-            @style/ShapeAppearance.MaterialComponents.MediumComponent
-        </item>
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.SagerNet.Small</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.SagerNet.Medium</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.SagerNet.Large</item>
+        <item name="itemShapeAppearance">@style/ShapeAppearance.SagerNet.Large</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.SagerNet</item>
 
         <item name="alertDialogTheme">
             @style/ThemeOverlay.MaterialComponents.MaterialAlertDialog.SagerNet
@@ -107,6 +118,26 @@
 
         <item name="windowFixedHeightMajor" type="dimen">95%</item>
 
+    </style>
+
+    <!-- Modern M3 shape system -->
+    <style name="ShapeAppearance.SagerNet.Small" parent="ShapeAppearance.Material3.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">12dp</item>
+    </style>
+
+    <style name="ShapeAppearance.SagerNet.Medium" parent="ShapeAppearance.Material3.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
+    </style>
+
+    <style name="ShapeAppearance.SagerNet.Large" parent="ShapeAppearance.Material3.LargeComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">24dp</item>
+    </style>
+
+    <style name="PreferenceThemeOverlay.SagerNet" parent="PreferenceThemeOverlay">
+        <item name="preferenceCategoryTitleTextColor">?accentOrTextPrimary</item>
     </style>
 
     <style name="AppearanceFoundation.Title" parent="TextAppearance.AppCompat.Title">

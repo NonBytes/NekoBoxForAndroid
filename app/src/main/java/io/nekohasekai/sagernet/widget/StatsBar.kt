@@ -2,15 +2,20 @@ package io.nekohasekai.sagernet.widget
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.ColorStateList
 import android.text.format.Formatter
 import android.util.AttributeSet
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.widget.TooltipCompat
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenStarted
 import com.google.android.material.bottomappbar.BottomAppBar
+import com.google.android.material.shape.MaterialShapeDrawable
+import com.google.android.material.shape.ShapeAppearanceModel
 import io.nekohasekai.sagernet.R
 import io.nekohasekai.sagernet.bg.BaseService
 import io.nekohasekai.sagernet.database.DataStore
@@ -30,6 +35,24 @@ class StatsBar @JvmOverloads constructor(
     private lateinit var behavior: YourBehavior
 
     var allowShow = true
+
+    init {
+        // Floating rounded stats bar, tinted with the current accent theme.
+        val background = MaterialShapeDrawable(
+            ShapeAppearanceModel.builder()
+                .setAllCornerSizes(resources.getDimension(R.dimen.stats_bar_corner_radius))
+                .build()
+        ).apply {
+            fillColor = ColorStateList.valueOf(
+                ContextCompat.getColor(context, R.color.stats_pill_bg)
+            )
+        }
+        ViewCompat.setBackground(this, background)
+        // Elevation must be set after construction: BottomAppBar overrides
+        // setElevation() and dereferences its internal MaterialShapeDrawable,
+        // which only exists once the constructor has finished.
+        elevation = resources.getDimension(R.dimen.stats_bar_elevation)
+    }
 
     override fun getBehavior(): YourBehavior {
         if (!this::behavior.isInitialized) behavior = YourBehavior { allowShow }

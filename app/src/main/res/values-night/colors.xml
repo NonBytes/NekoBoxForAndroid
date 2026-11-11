@@ -2,4 +2,9 @@
 <resources>
     <color name="fab_color_progress">@color/material_light_white</color>
     <color name="preference_simple_menu_background">#303030</color>
+
+    <!-- Floating light stats pill (dark theme) -->
+    <color name="stats_pill_bg">#FFE6E1E5</color>
+    <color name="stats_pill_text">#FF1C1B1F</color>
+    <color name="stats_pill_text_secondary">#CC1C1B1F</color>
 </resources>

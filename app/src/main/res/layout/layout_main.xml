@@ -48,8 +48,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="16dp"
             android:nextFocusUp="@+id/fab"
-            app:backgroundTint="?colorMaterial300"
             app:contentInsetStart="0dp"
             app:hideOnScroll="true"
             app:layout_scrollFlags="enterAlways|scroll">
@@ -59,40 +60,47 @@
                 android:layout_height="wrap_content"
                 android:background="?android:attr/selectableItemBackground"
                 android:orientation="vertical"
-                android:padding="16dp">
-
-                <TextView
-                    android:id="@+id/tx"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_columnWeight="1"
-                    android:layout_gravity="fill_horizontal"
-                    android:ellipsize="marquee"
-                    android:singleLine="true"
-                    android:textColor="?whiteOrTextPrimary"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/rx"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_columnWeight="1"
-                    android:layout_gravity="fill_horizontal"
-                    android:ellipsize="marquee"
-                    android:singleLine="true"
-                    android:textColor="?whiteOrTextPrimary"
-                    android:textSize="14sp" />
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="14dp">
 
                 <TextView
                     android:id="@+id/status"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="fill_horizontal"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:textColor="?whiteOrTextPrimary"
+                    android:textColor="@color/stats_pill_text"
                     android:textSize="16sp"
+                    android:textStyle="bold"
                     tools:text="@string/connection_test_available" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tx"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="marquee"
+                        android:singleLine="true"
+                        android:textColor="@color/stats_pill_text_secondary"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/rx"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="marquee"
+                        android:singleLine="true"
+                        android:textColor="@color/stats_pill_text_secondary"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
